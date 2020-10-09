@@ -13,24 +13,36 @@
 //①セッションを開始する
 
 //②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if (/* ②の処理を書く */){
-	//③SESSIONの「error2」に「ログインしてください」と設定する。
-	//④ログイン画面へ遷移する。
-}
+// if (/* ②の処理を書く */){
+//③SESSIONの「error2」に「ログインしてください」と設定する。
+//④ログイン画面へ遷移する。
+// }
 
 //⑤データベースへ接続し、接続情報を変数に保存する
-
-//⑥データベースで使用する文字コードを「UTF8」にする
-
-//⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
+$db_name = "zaiko2020_yse";
+$host = "localhost";
+$username = "zaiko2020_yse";
+$password = "2020zaiko";
+$result = "";
+try {
+	$conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+	$query = $conn->prepare("SELECT * FROM books");
+	$query->execute();
+	$result = $query;
+	echo "Connected successfully";
+} catch (PDOException $e) {
+	echo "Connection failed: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 	<meta charset="UTF-8">
 	<title>書籍一覧</title>
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 </head>
+
 <body>
 	<div id="header">
 		<h1>書籍一覧</h1>
@@ -43,18 +55,18 @@ if (/* ②の処理を書く */){
 				/*
 				 * ⑧SESSIONの「success」にメッセージが設定されているかを判定する。
 				 * 設定されていた場合はif文の中に入る。
-				 */ 
-				if(/* ⑧の処理を書く */){
-					//⑨SESSIONの「success」の中身を表示する。
-				}
+				 */
+				// if(/* ⑧の処理を書く */){
+				// 	//⑨SESSIONの「success」の中身を表示する。
+				// }
 				?>
 			</div>
-			
+
 			<!-- 左メニュー -->
 			<div id="left">
 				<p id="ninsyou_ippan">
 					<?php
-						echo @$_SESSION["account_name"];
+					echo @$_SESSION["account_name"];
 					?><br>
 					<button type="button" id="logout" onclick="location.href='logout.php'">ログアウト</button>
 				</p>
@@ -80,18 +92,15 @@ if (/* ②の処理を書く */){
 					</thead>
 					<tbody>
 						<?php
-						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
-						while(/* ⑩の処理を書く */){
-							//⑪extract変数を使用し、1レコードのデータを渡す。
-
+						while ($row = $result->fetch()) {
 							echo "<tr id='book'>";
-							echo "<td id='check'><input type='checkbox' name='books[]'value="./* ⑫IDを設定する */."></td>";
-							echo "<td id='id'>/* ⑬IDを表示する */</td>";
-							echo "<td id='title'>/* ⑭titleを表示する */</td>";
-							echo "<td id='author'>/* ⑮authorを表示する */</td>";
-							echo "<td id='date'>/* ⑯salesDateを表示する */</td>";
-							echo "<td id='price'>/* ⑰priceを表示する */</td>";
-							echo "<td id='stock'>/* ⑱stockを表示する */</td>";
+							echo "<td><input type='checkbox' name='books[]'value=" . $row['id'] . "></td>";
+							echo "<td>" . $row['id'] . "</td>";
+							echo "<td>" . $row['title'] . "</td>";
+							echo "<td>" . $row['author'] . "</td>";
+							echo "<td>" . $row['salesDate'] . "/</td>";
+							echo "<td>" . $row['price'] . "/</td>";
+							echo "<td>" . $row['stock'] . "/</td>";
 
 							echo "</tr>";
 						}
@@ -105,4 +114,5 @@ if (/* ②の処理を書く */){
 		<footer>株式会社アクロイト</footer>
 	</div>
 </body>
+
 </html>
