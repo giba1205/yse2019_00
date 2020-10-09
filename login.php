@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 		$_name = test_input($name);
 		$_password = test_input($password);
+		//rat la vai lol
 	} else {
 		$error = "名前とパスワードを入力してください";
 	}
