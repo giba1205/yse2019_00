@@ -17,14 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($name === 'yse' && $password === '2019'){	
 			$_SESSION["name"] = $name;
 			$_SESSION["login"] = true;
-			header( "Location: http://localhost:8080/yse2019_00/zaiko_ichiran.php" ) ;
+			header( "Location: http://localhost/yse2019_00/zaiko_ichiran.php" ) ;
 		}else{
 			$error = "ユーザー名かパスワードが間違っています";
 		}
 		$_name = test_input($name);
 		$_password = test_input($password);
-		//rat la vai lol
-		//test commit
 	} else {
 		$error = "名前とパスワードを入力してください";
 	}
