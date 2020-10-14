@@ -14,30 +14,47 @@
  * ①session_status()の結果が「PHP_SESSION_NONE」と一致するか判定する。
  * 一致した場合はif文の中に入る。
  */
-if (/* ①.の処理を行う */) {
-	//②セッションを開始する
-}
+// if (/* ①.の処理を行う */) {
+// 	//②セッションを開始する
+// }
 
 
 //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if (/* ③の処理を書く */){
-	//④SESSIONの「error2」に「ログインしてください」と設定する。
-	//⑤ログイン画面へ遷移する。
-}
+// if (/* ③の処理を書く */){
+// 	//④SESSIONの「error2」に「ログインしてください」と設定する。
+// 	//⑤ログイン画面へ遷移する。
+// }
 
 //⑥データベースへ接続し、接続情報を変数に保存する
-
-//⑦データベースで使用する文字コードを「UTF8」にする
-
-//⑧POSTの「books」の値が空か判定する。空の場合はif文の中に入る。
-if(/* ⑧の処理を行う */){
-	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
-	//⑩在庫一覧画面へ遷移する。
+$db_name = "zaiko2020_yse";
+$host = "localhost";
+$username = "zaiko2020_yse";
+$password = "2020zaiko";
+$result = "";
+try {
+	$conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+	$query = $conn->prepare("SELECT * FROM books");
+	$query->execute();
+	$result = $query;
+	echo "Connected successfully";
+} catch (PDOException $e) {
+	echo "Connection failed: " . $e->getMessage();
 }
 
-function getId($id,$con){
+
+//⑧POSTの「books」の値が空か判定する。空の場合はif文の中に入る。
+// if(/* ⑧の処理を行う */){
+// 	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
+// 	//⑩在庫一覧画面へ遷移する。
+// }
+
+function getId($id, $con)
+{
+	// $con = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+	// $query = $con->prepare("SELECT * FROM books");
 	/* 
 	 * ⑪書籍を取得するSQLを作成する実行する。
+	 
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
 	 * SQLの実行結果を変数に保存する。
 	 */
@@ -48,11 +65,13 @@ function getId($id,$con){
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>入荷</title>
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 </head>
+
 <body>
 	<!-- ヘッダ -->
 	<div id="header">
@@ -72,15 +91,15 @@ function getId($id,$con){
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">
-			<?php
-			/*
+				<?php
+				/*
 			 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
 			 * 設定されていた場合はif文の中に入る。
-			 */ 
-			if(/* ⑬の処理を書く */){
-				//⑭SESSIONの「error」の中身を表示する。
-			}
-			?>
+			 */
+				// if(/* ⑬の処理を書く */){
+				// 	//⑭SESSIONの「error」の中身を表示する。
+				// }
+				?>
 			</div>
 			<div id="center">
 				<table>
@@ -95,25 +114,25 @@ function getId($id,$con){
 							<th id="in">入荷数</th>
 						</tr>
 					</thead>
-					<?php 
+					<?php
 					/*
 					 * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 					 */
-    				foreach(/* ⑮の処理を書く */){
-    					// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
+					foreach ($result as $rs) {
+						// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
 					?>
-					<input type="hidden" value="<?php echo	/* ⑰ ⑯の戻り値からidを取り出し、設定する */;?>" name="books[]">
-					<tr>
-						<td><?php echo	/* ⑱ ⑯の戻り値からidを取り出し、表示する */;?></td>
-						<td><?php echo	/* ⑲ ⑯の戻り値からtitleを取り出し、表示する */;?></td>
-						<td><?php echo	/* ⑳ ⑯の戻り値からauthorを取り出し、表示する */;?></td>
-						<td><?php echo	/* ㉑ ⑯の戻り値からsalesDateを取り出し、表示する */;?></td>
-						<td><?php echo	/* ㉒ ⑯の戻り値からpriceを取り出し、表示する */;?></td>
-						<td><?php echo	/* ㉓ ⑯の戻り値からstockを取り出し、表示する */;?></td>
-						<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
-					</tr>
+						<input type="hidden" value="<?php echo	$rs["id"]; ?>" name="books[]">
+						<tr>
+							<td><?php echo	$rs["id"]; ?></td>
+							<td><?php echo	$rs["title"]; ?></td>
+							<td><?php echo	$rs["author"]; ?></td>
+							<td><?php echo	$rs["salesDate"]; ?></td>
+							<td><?php echo	$rs["price"]; ?></td>
+							<td><?php echo	$rs["stock"]; ?></td>
+							<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
+						</tr>
 					<?php
-					 }
+					}
 					?>
 				</table>
 				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
@@ -125,4 +144,5 @@ function getId($id,$con){
 		<footer>株式会社アクロイト</footer>
 	</div>
 </body>
+
 </html>
