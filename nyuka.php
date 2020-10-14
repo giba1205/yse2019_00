@@ -50,6 +50,7 @@ try {
 
 function getId($id, $con)
 {
+	//demo chuc nang
 	// $con = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 	// $query = $con->prepare("SELECT * FROM books");
 	/* 
