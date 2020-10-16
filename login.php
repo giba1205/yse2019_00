@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if ($name === 'yse' && $password === '2019') {
 				$_SESSION["name"] = $name;
 				$_SESSION["login"] = true;
+				//sua cho nay
 				include 'zaiko_ichiran.php';
 			} else {
 				$error = "ユーザー名かパスワードが間違っています";

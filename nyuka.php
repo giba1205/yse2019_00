@@ -120,6 +120,7 @@ function getId($id, $con)
 					//  ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 					foreach ($_POST['books'] as $book_id) {
 						// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
+						//da sua o cho nay
 						$result_book_byId = getId($book_id, $pdo);
 					?>
 						<input type="hidden" value="<?php echo	$result_book_byId["id"]; ?>" name="books[]">
