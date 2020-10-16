@@ -31,12 +31,9 @@ $host = "localhost";
 $username = "zaiko2020_yse";
 $password = "2020zaiko";
 $result = "";
+$pdo = "";
 try {
-	$conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-	$query = $conn->prepare("SELECT * FROM books");
-	$query->execute();
-	$result = $query;
-	echo "Connected successfully";
+	$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 } catch (PDOException $e) {
 	echo "Connection failed: " . $e->getMessage();
 }
@@ -46,21 +43,24 @@ try {
 // if(/* ⑧の処理を行う */){
 // 	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
 // 	//⑩在庫一覧画面へ遷移する。
+// include 'zaiko_ichiran.php';
 // }
 
 function getId($id, $con)
 {
-	//demo chuc nang
-	// $con = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-	// $query = $con->prepare("SELECT * FROM books");
-	/* 
-	 * ⑪書籍を取得するSQLを作成する実行する。
-	 
-	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
-	 * SQLの実行結果を変数に保存する。
-	 */
-
+	//  ⑪書籍を取得するSQLを作成する実行する。
+	$query_get_book = "SELECT * FROM books WHERE id = {$id}";
+	//  その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
+	//  SQLの実行結果を変数に保存する。
+	try {
+		$query_ex = $con->query($query_get_book);
+		$rows_results = $query_ex->fetch(PDO::FETCH_ASSOC);
+		$query_ex->execute();
+	} catch (PDOException $e) {
+		echo "Connection failed: " . $e->getMessage();
+	}
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
+	return $rows_results;
 }
 
 ?>
@@ -116,20 +116,20 @@ function getId($id, $con)
 						</tr>
 					</thead>
 					<?php
-					/*
-					 * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
-					 */
-					foreach ($result as $rs) {
+					
+					//  ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
+					foreach ($_POST['books'] as $book_id) {
 						// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
+						$result_book_byId = getId($book_id, $pdo);
 					?>
-						<input type="hidden" value="<?php echo	$rs["id"]; ?>" name="books[]">
+						<input type="hidden" value="<?php echo	$result_book_byId["id"]; ?>" name="books[]">
 						<tr>
-							<td><?php echo	$rs["id"]; ?></td>
-							<td><?php echo	$rs["title"]; ?></td>
-							<td><?php echo	$rs["author"]; ?></td>
-							<td><?php echo	$rs["salesDate"]; ?></td>
-							<td><?php echo	$rs["price"]; ?></td>
-							<td><?php echo	$rs["stock"]; ?></td>
+							<td><?php echo	$result_book_byId["id"]; ?></td>
+							<td><?php echo	$result_book_byId["title"]; ?></td>
+							<td><?php echo	$result_book_byId["author"]; ?></td>
+							<td><?php echo	$result_book_byId["salesDate"]; ?></td>
+							<td><?php echo	$result_book_byId["price"]; ?></td>
+							<td><?php echo	$result_book_byId["stock"]; ?></td>
 							<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
 						</tr>
 					<?php

@@ -1,30 +1,23 @@
 <?php
-function test_input($data)
-{
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
-}
 $_name = "";
 $_password = "";
 $error = "";
 $msg = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$name = $_POST["name"];
-	$password = $_POST["pass"];
-	if (!empty($name) && !empty($password)) {
-		if($name === 'yse' && $password === '2019'){	
-			$_SESSION["name"] = $name;
-			$_SESSION["login"] = true;
-			header( "Location: http://localhost/yse2019_00/zaiko_ichiran.php" ) ;
-		}else{
-			$error = "ユーザー名かパスワードが間違っています";
+	if (isset($_POST['name']) && $_POST["pass"]) {
+		$name = $_POST["name"];
+		$password = $_POST["pass"];
+		if (!empty($name) && !empty($password)) {
+			if ($name === 'yse' && $password === '2019') {
+				$_SESSION["name"] = $name;
+				$_SESSION["login"] = true;
+				include 'zaiko_ichiran.php';
+			} else {
+				$error = "ユーザー名かパスワードが間違っています";
+			}
+		} else {
+			$error = "名前とパスワードを入力してください";
 		}
-		$_name = test_input($name);
-		$_password = test_input($password);
-	} else {
-		$error = "名前とパスワードを入力してください";
 	}
 }
 
@@ -60,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<h1>ログイン</h1>
 		<?php
 		//⑮エラーメッセージの変数に入っている値を表示する
-		echo "<div id='error'>".$error."</div>";
+		echo "<div id='error'>" . $error . "</div>";
 
 		//⑯メッセージの変数に入っている値を表示する
-		echo "<div id='msg'>".$msg."</div>";
+		echo "<div id='msg'>" . $msg . "</div>";
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>

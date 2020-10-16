@@ -81,7 +81,7 @@ try {
 				<table>
 					<thead>
 						<tr>
-							<th id="check"></th>
+							<th id="check"></th></th>
 							<th id="id">ID</th>
 							<th id="book_name">書籍名</th>
 							<th id="author">著者名</th>
@@ -98,9 +98,9 @@ try {
 							echo "<td>" . $row['id'] . "</td>";
 							echo "<td>" . $row['title'] . "</td>";
 							echo "<td>" . $row['author'] . "</td>";
-							echo "<td>" . $row['salesDate'] . "/</td>";
-							echo "<td>" . $row['price'] . "/</td>";
-							echo "<td>" . $row['stock'] . "/</td>";
+							echo "<td>" . $row['salesDate'] . "</td>";
+							echo "<td>" . $row['price'] . "</td>";
+							echo "<td>" . $row['stock'] . "</td>";
 
 							echo "</tr>";
 						}
