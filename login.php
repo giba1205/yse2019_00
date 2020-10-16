@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				$_SESSION["name"] = $name;
 				$_SESSION["login"] = true;
 				//sua cho nay
-				include 'zaiko_ichiran.php';
+				header("Location: zaiko_ichiran.php");
 			} else {
 				$error = "ユーザー名かパスワードが間違っています";
 			}

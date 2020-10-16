@@ -5,7 +5,7 @@
 */
 session_start();
 unset($_SESSION['user']);
-header("Location: http://localhost/yse2019_00/login.php");
+header("Location: login.php");
 //THAY DOI TY
 //①セッションを開始する。
 
