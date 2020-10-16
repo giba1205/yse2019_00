@@ -30,12 +30,9 @@ $db_name = "zaiko2020_yse";
 $host = "localhost";
 $username = "zaiko2020_yse";
 $password = "2020zaiko";
-$result = "";
+$pdo = "";
 try {
-	$conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-	$query = $conn->prepare("SELECT * FROM books");
-	$query->execute();
-	$result = $query;
+	$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 	echo "Connected successfully";
 } catch (PDOException $e) {
 	echo "Connection failed: " . $e->getMessage();
@@ -55,6 +52,10 @@ function getId($id,$con){
 	 */
 
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
+	$sql = "SELECT * FROM books WHERE id = {$id}";
+	$query =$con-> query($sql);
+	$rows =$query->fetch(PDO::FETCH_ASSOC);
+	return $rows;
 }
 ?>
 <!DOCTYPE html>
@@ -110,17 +111,18 @@ function getId($id,$con){
 				/*
 				 * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 				 */
-				foreach($result as $syu){
+				foreach ($_POST['books'] as $book_syu) {
+					$book = getId($book_syu,$pdo);
 					// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
 				?>
-				<input type="hidden" value="<?php echo	$syu["id"]; ?>" name="books[]">
+				<input type="hidden" value="<?php echo	$book["id"]; ?>" name="books[]">
 				<tr>
-					<td><?php echo	$syu["id"];?></td>
-					<td><?php echo	$syu["title"];?></td>
-					<td><?php echo	$syu["author"];?></td>
-					<td><?php echo	$syu["salesDate"];?></td>
-					<td><?php echo	$syu["price"];?></td>
-					<td><?php echo	$syu["stock"];?></td>
+					<td><?php echo	$book["id"];?></td>
+					<td><?php echo	$book["title"];?></td>
+					<td><?php echo	$book["author"];?></td>
+					<td><?php echo	$book["salesDate"];?></td>
+					<td><?php echo	$book["price"];?></td>
+					<td><?php echo	$book["stock"];?></td>
 					<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
 				</tr>
 				<?php

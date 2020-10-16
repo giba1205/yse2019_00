@@ -6,6 +6,7 @@
 session_start();
 unset($_SESSION['user']);
 header("Location: http://localhost/yse2019_00/login.php");
+//THAY DOI TY
 //①セッションを開始する。
 
 //②セッションを削除する。
