@@ -10,13 +10,9 @@
 数値以外が入力されています：入力された値に数字以外の文字が含まれている
 */
 
-/*
- * ①session_status()の結果が「PHP_SESSION_NONE」と一致するか判定する。
- * 一致した場合はif文の中に入る。
- */
-// if (/* ①.の処理を行う */) {
-// 	//②セッションを開始する
-// }
+// session_status()の結果が「PHP_SESSION_NONE」と一致するか判定する。
+// 一致した場合はif文の中に入る。
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 
 //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
@@ -116,11 +112,10 @@ function getId($id, $con)
 						</tr>
 					</thead>
 					<?php
-					
+
 					//  ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 					foreach ($_POST['books'] as $book_id) {
 						// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
-						//da sua o cho nay
 						$result_book_byId = getId($book_id, $pdo);
 					?>
 						<input type="hidden" value="<?php echo	$result_book_byId["id"]; ?>" name="books[]">
