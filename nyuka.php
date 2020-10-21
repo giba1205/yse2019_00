@@ -42,6 +42,7 @@ try {
 // include 'zaiko_ichiran.php';
 // }
 
+//update nyuka
 function getId($id, $con)
 {
 	//  ⑪書籍を取得するSQLを作成する実行する。

@@ -42,6 +42,7 @@ function updateByid($id, $con, $total)
 // }
 
 //⑧データベースへ接続し、接続情報を変数に保存する
+//update nyuka_kakunin
 $db_name = "zaiko2020_yse";
 $host = "localhost";
 $username = "zaiko2020_yse";
