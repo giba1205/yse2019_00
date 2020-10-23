@@ -147,21 +147,23 @@ $count++;
 					$books_result = $_POST['books'];
 
 					//㉝POSTの「books」から値を取得し、変数に設定する。
-					foreach($_POST['books'] as $book_id){
-						$result_book_byId = getByid($book_id, $pdo);
-
-						//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
-					?>
-					<tr>
-						<td><?php echo	$result_book_byId["title"]/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */;?></td>
-						<td><?php echo	$result_book_byId["stock"]/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */;?></td>
-						<td><?php echo	$_POST['stock'][$count_stock]/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */;?></td>
-					</tr>
-					<input type="hidden" name="books[]" value="<?php echo $books_result/* ㊳ ㉝で取得した値を設定する */;?>">
-					<input type="hidden" name="stock[]" value='<?php echo $_POST["stock"]/* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */;?>'>
-					<?php
-						//㊵ ㉜で宣言した変数をインクリメントで値を1増やす。
-						++$count_stock;
+					if(isset($_POST['books'])){
+						foreach($_POST['books'] as $book_id){
+							$result_book_byId = getByid($book_id, $pdo);
+	
+							//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
+						?>
+						<tr>
+							<td><?php echo	$result_book_byId["title"]/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */;?></td>
+							<td><?php echo	$result_book_byId["stock"]/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */;?></td>
+							<td><?php echo	$_POST['stock'][$count_stock]/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */;?></td>
+						</tr>
+						<input type="hidden" name="books[]" value="<?php echo $books_result/* ㊳ ㉝で取得した値を設定する */;?>">
+						<input type="hidden" name="stock[]" value='<?php echo $_POST["stock"]/* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */;?>'>
+						<?php
+							//㊵ ㉜で宣言した変数をインクリメントで値を1増やす。
+							++$count_stock;
+						}
 					}
 					?>
 				</tbody>

@@ -114,21 +114,23 @@ function getId($id,$con){
 				/*
 				 * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 				 */
-				foreach ($_POST['books'] as $book_syu) {
-					$book = getId($book_syu,$pdo);
-					// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
-				?>
-				<input type="hidden" value="<?php echo	$book["id"]; ?>" name="books[]">
-				<tr>
-					<td><?php echo	$book["id"];?></td>
-					<td><?php echo	$book["title"];?></td>
-					<td><?php echo	$book["author"];?></td>
-					<td><?php echo	$book["salesDate"];?></td>
-					<td><?php echo	$book["price"];?></td>
-					<td><?php echo	$book["stock"];?></td>
-					<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
-				</tr>
-				<?php
+				if(isset($_POST['books'])){
+					foreach ($_POST['books'] as $book_syu) {
+						$book = getId($book_syu,$pdo);
+						// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
+					?>
+					<input type="hidden" value="<?php echo	$book["id"]; ?>" name="books[]">
+					<tr>
+						<td><?php echo	$book["id"];?></td>
+						<td><?php echo	$book["title"];?></td>
+						<td><?php echo	$book["author"];?></td>
+						<td><?php echo	$book["salesDate"];?></td>
+						<td><?php echo	$book["price"];?></td>
+						<td><?php echo	$book["stock"];?></td>
+						<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
+					</tr>
+					<?php
+					}
 				}
 				?>
 			</table>
