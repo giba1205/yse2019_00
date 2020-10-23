@@ -32,7 +32,7 @@ function updateByid($id, $con, $total)
 	$updateQuery_byId = "UPDATE books SET stock = {$total} WHERE id = {$id}";
 	// 引数で受け取った$totalの値で在庫数を上書く。
 	// その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
-
+	return $updateQuery_byId;
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
@@ -59,8 +59,9 @@ try {
 $set_db_uf8 = "ALTER DATABASE zaiko2020 CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //⑩書籍数をカウントするための変数を宣言し、値を0で初期化する
-
+$count = 0;
 //⑪POSTの「books」から値を取得し、変数に設定する。
+$result_books = $_POST['books'];
 // foreach(/* ⑪の処理を書く */){
 // 	/*
 // 	 * ⑫POSTの「stock」について⑩の変数の値を使用して値を取り出す。
@@ -85,6 +86,7 @@ $set_db_uf8 = "ALTER DATABASE zaiko2020 CHARACTER SET utf8 COLLATE utf8_general_
 // 	}
 
 // 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
+$count++;
 // }
 
 /*
@@ -133,21 +135,23 @@ $set_db_uf8 = "ALTER DATABASE zaiko2020 CHARACTER SET utf8 COLLATE utf8_general_
 					<tbody>
 						<?php
 						//㉜書籍数をカウントするための変数を宣言し、値を0で初期化する。
-
+						$count_stock = 0;
 						//㉝POSTの「books」から値を取得し、変数に設定する。
+						$books_result = $_POST['books'];
 						foreach ($_POST['books'] as $book_id) {
-						// 	//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
+							// 	//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
 							$result_book_byId = getByid($book_id, $pdo);
 						?>
-						<tr>
-							<td><?php echo	$result_book_byId["id"]; ?></td>
-							<td><?php echo	$result_book_byId["stock"]; ?></td>
-							<td><?php ?></td>
-						</tr>
-						<input type="hidden" name="books[]" value="<?php  ?>">
-						<input type="hidden" name="stock[]" value='<?php ?>'>
+							<tr>
+								<td><?php echo	$result_book_byId["title"]; ?></td>
+								<td><?php echo	$result_book_byId["stock"]; ?></td>
+								<td><?php echo  $_POST['stock'][$count_stock]  ?></td>
+							</tr>
+							<input type="hidden" name="books[]" value="<?php $books_result ?>">
+							<input type="hidden" name="stock[]" value='<?php ?>'>
 						<?php
-						//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
+							//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
+							++$count_stock;
 						}
 						?>
 					</tbody>
