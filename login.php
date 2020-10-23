@@ -40,10 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // 	}
 
 // //⑫SESSIONの「error2」に値が入っているか判定する。入っていた場合はif文の中に入る
-// if (/* ⑫の処理を書く */) {
-// 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
-// 	//⑭SESSIONの「error2」にnullを入れる。
-// }
+$_SESSION["error2"] = "";
+if (isset($_SESSION["error2"])) {
+	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
+	$_SESSION["error2"] ="エラーメッセージ";
+	//⑭SESSIONの「error2」にnullを入れる。
+	$_SESSION["error2"] = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">

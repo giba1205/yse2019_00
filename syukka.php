@@ -13,6 +13,9 @@
  * ①session_status()の結果が「PHP_SESSION_NONE」と一致するか判定する。
  * 一致した場合はif文の中に入る。
  */
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 //if (/* ①の処理を行う */) {
 //	//②セッションを開始する
 //}
