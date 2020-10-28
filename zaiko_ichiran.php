@@ -53,13 +53,12 @@ try {
 			<!-- エラーメッセージ表示 -->
 			<div id="error">
 				<?php
-				/*
-				 * ⑧SESSIONの「success」にメッセージが設定されているかを判定する。
-				 * 設定されていた場合はif文の中に入る。
-				 */
-				// if(/* ⑧の処理を書く */){
-				// 	//⑨SESSIONの「success」の中身を表示する。
-				// }
+				//  ⑧SESSIONの「success」にメッセージが設定されているかを判定する。
+				$_SESSION["success"] = "";
+				//  設定されていた場合はif文の中に入る。
+				if (isset($_SESSION['success']) && empty($_SESSION['success'])) {
+					$_SESSION["success"] = "エラーメッセージ";
+				}
 				?>
 			</div>
 
@@ -82,7 +81,8 @@ try {
 				<table>
 					<thead>
 						<tr>
-							<th id="check"></th></th>
+							<th id="check"></th>
+							</th>
 							<th id="id">ID</th>
 							<th id="book_name">書籍名</th>
 							<th id="author">著者名</th>

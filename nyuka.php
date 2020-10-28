@@ -36,11 +36,13 @@ try {
 
 
 //⑧POSTの「books」の値が空か判定する。空の場合はif文の中に入る。
-// if(/* ⑧の処理を行う */){
-// 	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
-// 	//⑩在庫一覧画面へ遷移する。
-// include 'zaiko_ichiran.php';
-// }
+
+if (isset($_POST['books']) && empty($_POST['books'])) {
+	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
+	$_SESSION["success"] = "入荷する商品が選択されていません";
+	//⑩在庫一覧画面へ遷移する。
+	include 'zaiko_ichiran.php';
+}
 
 //update nyuka
 function getId($id, $con)
@@ -91,12 +93,15 @@ function getId($id, $con)
 			<div id="error">
 				<?php
 				/*
-			 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
-			 * 設定されていた場合はif文の中に入る。
-			 */
-				// if(/* ⑬の処理を書く */){
-				// 	//⑭SESSIONの「error」の中身を表示する。
-				// }
+				* ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
+				* 設定されていた場合はif文の中に入る。
+				*/
+				$_SESSION["error"] = "";
+				//  設定されていた場合はif文の中に入る。
+				if (isset($_SESSION['error']) && empty($_SESSION['error'])) {
+					//⑭SESSIONの「error」の中身を表示する。
+					$_SESSION["error"] = "エラーメッセージ";
+				}
 				?>
 			</div>
 			<div id="center">
@@ -115,11 +120,11 @@ function getId($id, $con)
 					<?php
 
 					//  ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
-					if(isset($_POST['books'])){
+					if (isset($_POST['books'])) {
 						foreach ($_POST['books'] as $book_id) {
 							// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
 							$result_book_byId = getId($book_id, $pdo);
-						?>
+					?>
 							<input type="hidden" value="<?php echo	$result_book_byId["id"]; ?>" name="books[]">
 							<tr>
 								<td><?php echo	$result_book_byId["id"]; ?></td>
@@ -130,7 +135,7 @@ function getId($id, $con)
 								<td><?php echo	$result_book_byId["stock"]; ?></td>
 								<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
 							</tr>
-						<?php
+					<?php
 						}
 					}
 					?>
