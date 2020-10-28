@@ -69,7 +69,7 @@ foreach ($result_books as $result) {
 	// 半角数字以外の文字が入っていた場合はif文の中に入る。
 	$stock_value = $_POST['stock'][$count];
 	var_dump($stock_value);
-	if (!is_numeric($stock_value)) {
+	if (!is_numeric($stock_value) && $stock_value < 0) {
 		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
 		$_SESSION["error"] = "数値以外が入力されています";
 		//⑭「include」を使用して「nyuka.php」を呼び出す。
@@ -80,21 +80,21 @@ foreach ($result_books as $result) {
 
 
 
-// 	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
+	// 	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
 	$result_books = getByid($result, $pdo);
 
-// 	//⑰ ⑯で取得した書籍の情報の「stock」と、⑩の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+	// 	//⑰ ⑯で取得した書籍の情報の「stock」と、⑩の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
 
-// 	//⑱ ⑰の値が100を超えているか判定する。超えていた場合はif文の中に入る。
-// 	if(/* ⑱の処理を行う */){
-// 		//⑲SESSIONの「error」に「最大在庫数を超える数は入力できません」と設定する。
-// 		//⑳「include」を使用して「nyuka.php」を呼び出す。
-// 		//㉑「exit」関数で処理を終了する。
-//exit();
-// 	}
+	// 	//⑱ ⑰の値が100を超えているか判定する。超えていた場合はif文の中に入る。
+	// 	if(/* ⑱の処理を行う */){
+	// 		//⑲SESSIONの「error」に「最大在庫数を超える数は入力できません」と設定する。
+	// 		//⑳「include」を使用して「nyuka.php」を呼び出す。
+	// 		//㉑「exit」関数で処理を終了する。
+	//exit();
+	// 	}
 
-// 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
-$count++;
+	// 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
+	$count++;
 }
 
 /*
