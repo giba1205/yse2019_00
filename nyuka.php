@@ -27,7 +27,6 @@ $host = "localhost";
 $username = "zaiko2020_yse";
 $password = "2020zaiko";
 $result = "";
-$pdo = "";
 try {
 	$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 } catch (PDOException $e) {
@@ -53,7 +52,7 @@ function getId($id, $con)
 	//  SQLの実行結果を変数に保存する。
 	try {
 		$query_ex = $con->query($query_get_book);
-		$rows_results = $query_ex->fetch(PDO::FETCH_ASSOC);
+		$rows_results = $query_ex->fetch();
 		$query_ex->execute();
 	} catch (PDOException $e) {
 		echo "Connection failed: " . $e->getMessage();
@@ -120,10 +119,12 @@ function getId($id, $con)
 					<?php
 
 					//  ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
-					if (isset($_POST['books'])) {
+					if (isset($_POST['books']) && !empty($_POST['books'])) {
 						foreach ($_POST['books'] as $book_id) {
 							// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
-							$result_book_byId = getId($book_id, $pdo);
+							if (!empty($book_id)) {
+								$result_book_byId = getId($book_id, $pdo);
+							}
 					?>
 							<input type="hidden" value="<?php echo	$result_book_byId["id"]; ?>" name="books[]">
 							<tr>

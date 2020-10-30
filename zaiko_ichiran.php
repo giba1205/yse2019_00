@@ -30,7 +30,6 @@ try {
 	$query = $conn->prepare("SELECT * FROM books");
 	$query->execute();
 	$result = $query;
-	echo "Connected successfully";
 } catch (PDOException $e) {
 	echo "Connection failed: " . $e->getMessage();
 }
