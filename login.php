@@ -1,4 +1,5 @@
 <?php
+session_start();
 $_name = "";
 $_password = "";
 $error = "";
@@ -7,30 +8,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (isset($_POST['name']) && $_POST["pass"]) {
 		$name = $_POST["name"];
 		$password = $_POST["pass"];
-		if (!empty($name) && !empty($password)) {
-			if ($name === 'yse' && $password === '2019') {
-				$_SESSION["name"] = $name;
-				$_SESSION["login"] = true;
-				//sua cho nay
-				header("Location: zaiko_ichiran.php");
-			}
-			else {
-				$error = "ユーザー名かパスワードが間違っています";
-			}
-			
-		} else {
-			$error = "名前とパスワードを入力してください";
-		}
+	}else{
+		$msg = "名前とパスワードを入力してください";
+	}
+}
+if (!empty($name) && !empty($password)) {
+	if ($name === 'yse' && $password === '2019') {
+		$_SESSION["name"] = $name;
+		$_SESSION["login"] = true;
+		//sua cho nay
+		header("Location: zaiko_ichiran.php");
+	}
+	else {
+		$error = "ユーザー名かパスワードが間違っています";
 	}
 }
 //⑦名前が入力されているか判定する。入力されていた場合はif文の中に入る
 // if (!empty($name) && !empty($password)) {
 //	//⑧名前に「yse」、パスワードに「2019」と設定されているか確認する。設定されていた場合はif文の中に入る
-//	if ($_POST["name"]=="yse" && $_POST["pass"]=="2019") {
-//		$yseURL = 'admin.php';
-//		header('Location: '.$yseURL);
-//		exit();
-//	}
 // 	if (/* ⑧の処理を書く */){
 // 		//⑨SESSIONに名前を設定し、SESSIONの「login」フラグをtrueにする
 // 		//⑩在庫一覧画面へ遷移する
@@ -40,13 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // 	}
 
 // //⑫SESSIONの「error2」に値が入っているか判定する。入っていた場合はif文の中に入る
-$_SESSION["error2"] = "";
-if (isset($_SESSION["error2"])) {
 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
-	$_SESSION["error2"] ="エラーメッセージ";
 	//⑭SESSIONの「error2」にnullを入れる。
-	$_SESSION["error2"] = null;
-}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -61,11 +51,12 @@ if (isset($_SESSION["error2"])) {
 	<div id="main">
 		<h1>ログイン</h1>
 		<?php
+		
 		//⑮エラーメッセージの変数に入っている値を表示する
 		echo "<div id='error'>" . $error . "</div>";
-
 		//⑯メッセージの変数に入っている値を表示する
 		echo "<div id='msg'>" . $msg . "</div>";
+
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
