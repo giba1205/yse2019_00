@@ -13,12 +13,23 @@ session_start();
 
 function getByid($id, $con)
 {
+
+
+	// $query = $con->prepare("SELECT * FROM books WHERE id = ?");
+	// $query->execute(array($id));
+	// $rows_results = $query->fetch(PDO::FETCH_ASSOC);
+
+
 	// ②書籍を取得するSQLを作成する実行する。
-	$query_get_book = "SELECT * FROM books WHERE id = {$id}";
+	// $query_get_book = "SELECT * FROM books WHERE id = {$id}";
 	try {
-		$query_ex = $con->query($query_get_book);
-		$rows_results = $query_ex->fetch(PDO::FETCH_ASSOC);
-		$query_ex->execute();
+		// $query_ex = $con->query($query_get_book);
+		// $rows_results = $query_ex->fetch(PDO::FETCH_ASSOC);
+		// $query_ex->execute();
+
+		$query = $con->prepare("SELECT * FROM books WHERE id = {$id}");
+		$query->execute();
+		$rows_results = $query->fetch(PDO::FETCH_ASSOC);
 	} catch (PDOException $e) {
 		echo "Connection failed: " . $e->getMessage();
 	}
@@ -43,12 +54,12 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if ($_SESSION["login"] == false) {
-	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-	$_SESSION["error2"] = "ログインしてください";
-	//⑦ログイン画面へ遷移する。
-	header("Location: login.php");
-}
+// if ($_SESSION["login"] == false) {
+// 	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+// 	$_SESSION["error2"] = "ログインしてください";
+// 	//⑦ログイン画面へ遷移する。
+// 	header("Location: login.php");
+// }
 
 //⑧データベースへ接続し、接続情報を変数に保存する
 //update nyuka_kakunin
@@ -71,7 +82,7 @@ $count = 0;
 //⑪POSTの「books」から値を取得し、変数に設定する。
 if (isset($_POST['books'])) {
 	$result_books = $_POST['books'];
-	foreach ($result_books as $result) {
+	foreach ($result_books as $bk) {
 		// ⑫POSTの「stock」について⑩の変数の値を使用して値を取り出す。
 		// 半角数字以外の文字が設定されていないかを「is_numeric」関数を使用して確認する。
 		// 半角数字以外の文字が入っていた場合はif文の中に入る。
@@ -85,7 +96,7 @@ if (isset($_POST['books'])) {
 		}
 
 		//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
-		$result_books_withByID = getByid($result, $pdo);
+		$result_books_withByID = getByid($bk, $pdo);
 		//⑰ ⑯で取得した書籍の情報の「stock」と、⑩の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
 		$result_stock_zaiko = $result_books_withByID["stock"];
 		$stock_value_in = $_POST['stock'][$count];
@@ -111,8 +122,9 @@ if (isset($_POST['books'])) {
  */
 
 // 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。	
-if (isset($_POST['add'])) {
-	var_dump("em dang noi nao");
+var_dump("em dang noi nao");
+if (isset($_POST["add"])) {
+	var_dump("e vao day chua");
 	if ($_POST['add'] === 'ok') {
 		var_dump("em dang noi nao");
 		$count_update = 0;

@@ -130,7 +130,7 @@ function getId($id, $con)
 								$result_book_byId = getId($book_id, $pdo);
 							}
 					?>
-							<input type="hidden" value="<?php echo	$result_book_byId["id"]; ?>" name="books[]">
+							<input type="hidden" value="<?php echo	$book_id; ?>" name="books[]">
 							<tr>
 								<td><?php echo	$result_book_byId["id"]; ?></td>
 								<td><?php echo	$result_book_byId["title"]; ?></td>
