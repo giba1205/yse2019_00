@@ -12,8 +12,8 @@
 session_start();
 
 //①セッションを開始する
-if ($_SESSION["login"] = false) {
-	echo ("ログインしてください");
+if ($_SESSION["login"] == false) {
+	$_SESSION["error2"] = "ログインしてください";
 	header("Location: login.php");
 }
 
