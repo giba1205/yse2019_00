@@ -43,10 +43,12 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-// if (/* ⑤の処理を書く */){
-//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-//⑦ログイン画面へ遷移する。
-// }
+if ($_SESSION["login"] == false) {
+	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION["error2"] = "ログインしてください";
+	//⑦ログイン画面へ遷移する。
+	header("Location: login.php");
+}
 
 //⑧データベースへ接続し、接続情報を変数に保存する
 //update nyuka_kakunin
@@ -108,22 +110,23 @@ if (isset($_POST['books'])) {
  * 値が入っている場合は中身に「ok」が設定されていることを確認する。
  */
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	// 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。	
-	if (isset($_POST['add']) && $_POST['add'] === 'ok') {
-		var_dump("dasdasd");
+// 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。	
+if (isset($_POST['add'])) {
+	var_dump("em dang noi nao");
+	if ($_POST['add'] === 'ok') {
+		var_dump("em dang noi nao");
 		$count_update = 0;
-		// 	//㉕POSTの「books」から値を取得し、変数に設定する。
+		//㉕POSTの「books」から値を取得し、変数に設定する。
 		foreach ($_POST['books'] as $book_up) {
-			// 		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
-			// getByid($book_up, $pdo);
-			// 		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
-			$stock_up = $_POST['stock'][$count_update];
-			$stock_zaiko = $book_up["stock"];
+			//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
+			$result_by_id = getByid($book_up, $pdo);
+			//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+			$stock_up = $_POST['books'][$count_update];
+			$stock_zaiko = $result_by_id["stock"];
 			$total_update = $_POST['stock'][$count_update] + $book_up["stock"];
-			// 		//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
+			///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
 			updateByid($book_up["stock"]['id'], $pdo, $total_update);
-			// 		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
+			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
 			$count_update++;
 		}
 
@@ -133,6 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		header("Location: zaiko_ichiran.php");
 	}
 }
+
 
 
 ?>
