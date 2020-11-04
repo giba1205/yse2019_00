@@ -25,7 +25,10 @@ if (session_status() == PHP_SESSION_NONE) {
 //	//④SESSIONの「error2」に「ログインしてください」と設定する。
 //	//⑤ログイン画面へ遷移する。
 //}
-
+if ($_SESSION["login"] = false) {
+	echo ("ログインしてください");
+	header("Location: login.php");
+}
 //⑥データベースへ接続し、接続情報を変数に保存する
 
 //⑦データベースで使用する文字コードを「UTF8」にする

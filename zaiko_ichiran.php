@@ -12,6 +12,10 @@
 session_start();
 
 //①セッションを開始する
+if ($_SESSION["login"] = false) {
+	echo ("ログインしてください");
+	header("Location: login.php");
+}
 
 //②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
 // if (/* ②の処理を書く */){
