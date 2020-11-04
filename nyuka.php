@@ -20,8 +20,8 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 // 	//④SESSIONの「error2」に「ログインしてください」と設定する。
 // 	//⑤ログイン画面へ遷移する。
 // }
-if ($_SESSION["login"] = false) {
-	echo ("ログインしてください");
+if ($_SESSION["login"] == false) {
+	$_SESSION["error2"] = "ログインしてください";
 	header("Location: login.php");
 }
 
