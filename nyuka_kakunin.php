@@ -122,32 +122,35 @@ if (isset($_POST['books'])) {
  */
 
 // 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。	
-var_dump("em dang noi nao");
-if (isset($_POST["add"])) {
-	var_dump("e vao day chua");
-	if ($_POST['add'] === 'ok') {
-		var_dump("em dang noi nao");
-		$count_update = 0;
-		//㉕POSTの「books」から値を取得し、変数に設定する。
-		foreach ($_POST['books'] as $book_up) {
-			//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
-			$result_by_id = getByid($book_up, $pdo);
-			//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
-			$stock_up = $_POST['books'][$count_update];
-			$stock_zaiko = $result_by_id["stock"];
-			$total_update = $_POST['stock'][$count_update] + $book_up["stock"];
-			///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
-			updateByid($book_up["stock"]['id'], $pdo, $total_update);
-			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
-			$count_update++;
-		}
+function click()
+{
+	if (isset($_POST['add'])) {
+		if ($_POST['add'] === 'ok') {
+			var_dump("em dang noi nao");
+			$count_update = 0;
+			//㉕POSTの「books」から値を取得し、変数に設定する。
+			foreach ($_POST['books'] as $book_up) {
+				//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
+				$result_by_id = getByid($book_up, $pdo);
+				//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+				$stock_up = $_POST['books'][$count_update];
+				$stock_zaiko = $result_by_id["stock"];
+				$total_update = $_POST['stock'][$count_update] + $book_up["stock"];
+				///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
+				updateByid($book_up["stock"]['id'], $pdo, $total_update);
+				//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
+				$count_update++;
+			}
 
-		//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
-		$_SESSION["success"] = "入荷が完了しました";
-		//㉛「header」関数を使用して在庫一覧画面へ遷移する。
-		header("Location: zaiko_ichiran.php");
+			//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
+			$_SESSION["success"] = "入荷が完了しました";
+			//㉛「header」関数を使用して在庫一覧画面へ遷移する。
+			header("Location: zaiko_ichiran.php");
+		}
 	}
 }
+
+
 
 
 
@@ -208,7 +211,7 @@ if (isset($_POST["add"])) {
 						上記の書籍を入荷します。<br>
 						よろしいですか？
 					</p>
-					<button type="submit" id="message" formmethod="POST" name="add" value="ok">はい</button>
+					<button type="submit" id="message" formmethod="POST" name="add" value="ok" onclick="click()">はい</button>
 					<button type="submit" id="message" formaction="nyuka.php">いいえ</button>
 				</div>
 			</div>
