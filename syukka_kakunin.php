@@ -53,10 +53,12 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-//if (/* ⑤の処理を書く */){
-//	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-//	//⑦ログイン画面へ遷移する。
-//}
+if ($_SESSION["login"] == false) {
+	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION["error2"] = "ログインしてください";
+	//⑦ログイン画面へ遷移する。
+	header("Location: login.php");
+}
 // xem lai cho nay
 //⑧データベースへ接続し、接続情報を変数に保存する
 
@@ -70,7 +72,6 @@ $host = "localhost";
 $username = "zaiko2020_yse";
 $password = "2020zaiko";
 $result = "";
-$pdo = "";
 try {
 	$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 } catch (PDOException $e) {
@@ -116,7 +117,7 @@ foreach ($result_books as $result) {
 
 	$stock_in_saiko = $result_books_withByID["stock"];
 
-	if($stock_value > $stock_in_saiko){
+	if ($stock_value > $stock_in_saiko) {
 		$_SESSION["error"] = "出荷量は在庫量を超えることはできません";
 		include 'syukka.php';
 		exit();
@@ -128,7 +129,7 @@ foreach ($result_books as $result) {
 }
 
 if (isset($_POST['add'])) {
-	if ($_POST['add'] === 'ok') {
+	if ($_POST['add'] == 'ok') {
 		$count_update = 0;
 		//㉕POSTの「books」から値を取得し、変数に設定する。
 		foreach ($_POST['books'] as $book_up) {
@@ -137,7 +138,9 @@ if (isset($_POST['add'])) {
 			//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
 			$stock_up = $_POST['books'][$count_update];
 			$stock_zaiko = $result_by_id["stock"];
-			$total_update = $stock_zaiko-$_POST['stock'][$count_update];
+			$total_update = $stock_zaiko - $stock_up;
+			var_dump($result_by_id["stock"]);
+			exit;
 			///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
 			updateByid($book_up["stock"]['id'], $pdo, $total_update);
 			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
