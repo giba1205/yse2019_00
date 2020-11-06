@@ -139,8 +139,6 @@ if (isset($_POST['add'])) {
 			$stock_up = $_POST['books'][$count_update];
 			$stock_zaiko = $result_by_id["stock"];
 			$total_update = $stock_zaiko - $stock_up;
-			var_dump($result_by_id["stock"]);
-			exit;
 			///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
 			updateByid($book_up["stock"]['id'], $pdo, $total_update);
 			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
@@ -200,7 +198,7 @@ if (isset($_POST['add'])) {
 								<input type="hidden" name="stock[]" value='<?php echo $_POST['stock'][$count_stock]/* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */; ?>'>
 						<?php
 								//㊵ ㉜で宣言した変数をインクリメントで値を1増やす。
-								++$count_stock;
+								$count_stock++;
 							}
 						}
 						?>
