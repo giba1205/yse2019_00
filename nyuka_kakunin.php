@@ -102,11 +102,9 @@ if (isset($_POST['books'])) {
 		$result_stock_zaiko = $result_books_withByID["stock"];
 		$stock_value_in = $_POST['stock'][$count];
 		$total_zaiko = $result_stock_zaiko + $stock_value_in;
-		var_dump($total_zaiko."la em day");
 		//⑱ ⑰の値が100を超えているか判定する。超えていた場合はif文の中に入る。
 		if ($total_zaiko > 100 || $stock_value_in <= 0) {
 			//⑲SESSIONの「error」に「最大在庫数を超える数は入力できません」と設定する。
-			var_dump("co vao day khong");
 			$_SESSION["error"] = "最大在庫数を超える数は入力できません";
 			//⑳「include」を使用して「nyuka.php」を呼び出す。
 			include 'nyuka.php';
@@ -125,7 +123,6 @@ if (isset($_POST['books'])) {
  */
 // 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。
 if (isset($_POST['add']) && ($_POST['add'] == 'ok')) {
-	var_dump("em dang noi nao");
 	$count_update = 0;
 	//㉕POSTの「books」から値を取得し、変数に設定する。
 	foreach ($_POST['books'] as $book_up) {
@@ -134,7 +131,7 @@ if (isset($_POST['add']) && ($_POST['add'] == 'ok')) {
 		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
 		$stock_up = $_POST['books'][$count_update];
 		$stock_zaiko = $result_by_id["stock"];
-		$total_update = $_POST['stock'][$count_update] + $book_up["stock"];
+		$total_update = $_POST['stock'][$count_update] + $result_by_id["stock"];
 		///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
 		updateByid($book_up["stock"]['id'], $pdo, $total_update);
 		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
@@ -194,8 +191,8 @@ if (isset($_POST['add']) && ($_POST['add'] == 'ok')) {
 									<td><?php echo	$result_book_byId["stock"]; ?></td>
 									<td><?php echo  $_POST['stock'][$count_stock]  ?></td>
 								</tr>
-								<input type="hidden" name="books[]" value="<?php $result_book_byId["id"] ?>">
-								<input type="hidden" name="stock[]" value='<?php $_POST['stock'][$count_stock] ?>'>
+								<input type="hidden" name="books[]" value="<?php echo $result_book_byId["id"] ?>">
+								<input type="hidden" name="stock[]" value='<?php echo $_POST['stock'][$count_stock] ?>'>
 						<?php
 								//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
 								$count_stock++;
