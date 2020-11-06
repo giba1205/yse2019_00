@@ -9,7 +9,9 @@
 */
 
 //①セッションを開始する
-session_start();
+if (!isset($_SESSION)) {
+	session_start();
+}
 
 function getByid($id, $con)
 {
@@ -54,12 +56,12 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-// if ($_SESSION["login"] == false) {
-// 	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-// 	$_SESSION["error2"] = "ログインしてください";
-// 	//⑦ログイン画面へ遷移する。
-// 	header("Location: login.php");
-// }
+if ($_SESSION["login"] == false) {
+	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION["error2"] = "ログインしてください";
+	//⑦ログイン画面へ遷移する。
+	header("Location: login.php");
+}
 
 //⑧データベースへ接続し、接続情報を変数に保存する
 //update nyuka_kakunin
@@ -67,7 +69,6 @@ $db_name = "zaiko2020_yse";
 $host = "localhost";
 $username = "zaiko2020_yse";
 $password = "2020zaiko";
-$result = "";
 try {
 	$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 } catch (PDOException $e) {
@@ -101,9 +102,11 @@ if (isset($_POST['books'])) {
 		$result_stock_zaiko = $result_books_withByID["stock"];
 		$stock_value_in = $_POST['stock'][$count];
 		$total_zaiko = $result_stock_zaiko + $stock_value_in;
+		var_dump($total_zaiko."la em day");
 		//⑱ ⑰の値が100を超えているか判定する。超えていた場合はif文の中に入る。
 		if ($total_zaiko > 100 || $stock_value_in <= 0) {
 			//⑲SESSIONの「error」に「最大在庫数を超える数は入力できません」と設定する。
+			var_dump("co vao day khong");
 			$_SESSION["error"] = "最大在庫数を超える数は入力できません";
 			//⑳「include」を使用して「nyuka.php」を呼び出す。
 			include 'nyuka.php';
@@ -120,35 +123,30 @@ if (isset($_POST['books'])) {
  * ㉓POSTでこの画面のボタンの「add」に値が入ってるか確認する。
  * 値が入っている場合は中身に「ok」が設定されていることを確認する。
  */
-
-// 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。	
-function click()
-{
-	if (isset($_POST['add'])) {
-		if ($_POST['add'] === 'ok') {
-			var_dump("em dang noi nao");
-			$count_update = 0;
-			//㉕POSTの「books」から値を取得し、変数に設定する。
-			foreach ($_POST['books'] as $book_up) {
-				//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
-				$result_by_id = getByid($book_up, $pdo);
-				//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
-				$stock_up = $_POST['books'][$count_update];
-				$stock_zaiko = $result_by_id["stock"];
-				$total_update = $_POST['stock'][$count_update] + $book_up["stock"];
-				///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
-				updateByid($book_up["stock"]['id'], $pdo, $total_update);
-				//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
-				$count_update++;
-			}
-
-			//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
-			$_SESSION["success"] = "入荷が完了しました";
-			//㉛「header」関数を使用して在庫一覧画面へ遷移する。
-			header("Location: zaiko_ichiran.php");
-		}
+// 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。
+if (isset($_POST['add']) && ($_POST['add'] == 'ok')) {
+	var_dump("em dang noi nao");
+	$count_update = 0;
+	//㉕POSTの「books」から値を取得し、変数に設定する。
+	foreach ($_POST['books'] as $book_up) {
+		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
+		$result_by_id = getByid($book_up, $pdo);
+		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+		$stock_up = $_POST['books'][$count_update];
+		$stock_zaiko = $result_by_id["stock"];
+		$total_update = $_POST['stock'][$count_update] + $book_up["stock"];
+		///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
+		updateByid($book_up["stock"]['id'], $pdo, $total_update);
+		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
+		$count_update++;
 	}
+
+	//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
+	$_SESSION["success"] = "入荷が完了しました";
+	//㉛「header」関数を使用して在庫一覧画面へ遷移する。
+	header("Location: zaiko_ichiran.php");
 }
+
 
 
 
@@ -196,8 +194,8 @@ function click()
 									<td><?php echo	$result_book_byId["stock"]; ?></td>
 									<td><?php echo  $_POST['stock'][$count_stock]  ?></td>
 								</tr>
-								<input type="hidden" name="books[]" value="<?php $books_result ?>">
-								<input type="hidden" name="stock[]" value='<?php ?>'>
+								<input type="hidden" name="books[]" value="<?php $result_book_byId["id"] ?>">
+								<input type="hidden" name="stock[]" value='<?php $_POST['stock'][$count_stock] ?>'>
 						<?php
 								//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
 								$count_stock++;
@@ -211,7 +209,7 @@ function click()
 						上記の書籍を入荷します。<br>
 						よろしいですか？
 					</p>
-					<button type="submit" id="message" formmethod="POST" name="add" value="ok" onclick="click()">はい</button>
+					<button type="submit" id="message" formmethod="POST" name="add" value="ok">はい</button>
 					<button type="submit" id="message" formaction="nyuka.php">いいえ</button>
 				</div>
 			</div>
