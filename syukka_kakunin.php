@@ -9,7 +9,9 @@
 */
 
 //①セッションを開始する
-session_start();
+if (!isset($_SESSION)) {
+	session_start();
+}
 
 function getByid($id, $con)
 {
