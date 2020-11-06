@@ -31,6 +31,7 @@ function getByid($id, $con)
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
 	return $rows_results;
 }
+
 function updateByid($id, $con, $total)
 {
 	/*
@@ -39,7 +40,16 @@ function updateByid($id, $con, $total)
 	 * その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
 	 */
 	$updateQuery_byId = "UPDATE books SET stock = {$total} WHERE id = {$id}";
-	return $updateQuery_byId;
+	// 引数で受け取った$totalの値で在庫数を上書く。
+	// その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
+	try {
+		$query_update = $con->query($updateQuery_byId);
+		$rows_update_results = $query_update->fetch(PDO::FETCH_ASSOC);
+		$query_update->execute();
+	} catch (PDOException $e) {
+		echo "Connection failed: " . $e->getMessage();
+	}
+	return $rows_update_results;
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
@@ -117,24 +127,29 @@ foreach ($result_books as $result) {
 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
 }
 
-///*
-// * ㉓POSTでこの画面のボタンの「add」に値が入ってるか確認する。
-// * 値が入っている場合は中身に「ok」が設定されていることを確認する。
-// */
-//if(/* ㉓の処理を書く */){
-//	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。
-//
-//	//㉕POSTの「books」から値を取得し、変数に設定する。
-//	foreach(/* ㉕の処理を書く */){
-//		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
-//		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出して書籍情報の「stock」から値を引いた値を変数に保存する。
-//		//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
-//		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
-//	}
-//
-//	//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
-//	//㉛「header」関数を使用して在庫一覧画面へ遷移する。
-//}
+if (isset($_POST['add'])) {
+	if ($_POST['add'] === 'ok') {
+		$count_update = 0;
+		//㉕POSTの「books」から値を取得し、変数に設定する。
+		foreach ($_POST['books'] as $book_up) {
+			//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
+			$result_by_id = getByid($book_up, $pdo);
+			//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+			$stock_up = $_POST['books'][$count_update];
+			$stock_zaiko = $result_by_id["stock"];
+			$total_update = $stock_zaiko-$_POST['stock'][$count_update];
+			///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
+			updateByid($book_up["stock"]['id'], $pdo, $total_update);
+			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
+			$count_update++;
+		}
+
+		//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
+		$_SESSION["success"] = "入荷が完了しました";
+		//㉛「header」関数を使用して在庫一覧画面へ遷移する。
+		header("Location: zaiko_ichiran.php");
+	}
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -178,8 +193,8 @@ foreach ($result_books as $result) {
 									<td><?php echo	$result_book_byId["stock"]/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */; ?></td>
 									<td><?php echo	$_POST['stock'][$count_stock]/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */; ?></td>
 								</tr>
-								<input type="hidden" name="books[]" value="<?php echo $books_result/* ㊳ ㉝で取得した値を設定する */; ?>">
-								<input type="hidden" name="stock[]" value='<?php echo $_POST["stock"]/* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */; ?>'>
+								<input type="hidden" name="books[]" value="<?php echo $result_book_byId["id"]/* ㊳ ㉝で取得した値を設定する */; ?>">
+								<input type="hidden" name="stock[]" value='<?php echo $_POST['stock'][$count_stock]/* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */; ?>'>
 						<?php
 								//㊵ ㉜で宣言した変数をインクリメントで値を1増やす。
 								++$count_stock;
