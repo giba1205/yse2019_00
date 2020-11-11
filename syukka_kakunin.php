@@ -120,7 +120,7 @@ foreach ($result_books as $result) {
 	$stock_in_zaiko = $result_books_withByID["stock"];
 
 
-	if ($stock_value > $stock_in_saiko) {
+	if ($stock_value > $stock_in_zaiko) {
 		$_SESSION["error"] = "出荷量は在庫量を超えることはできません";
 		include 'syukka.php';
 		exit();
