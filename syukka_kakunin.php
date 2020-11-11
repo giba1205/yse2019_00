@@ -9,7 +9,9 @@
 */
 
 //①セッションを開始する
-session_start();
+if (!isset($_SESSION)) {
+	session_start();
+}
 
 function getByid($id, $con)
 {
@@ -115,9 +117,10 @@ foreach ($result_books as $result) {
 		exit();
 	}
 
-	$stock_in_saiko = $result_books_withByID["stock"];
+	$stock_in_zaiko = $result_books_withByID["stock"];
 
-	if ($stock_value > $stock_in_saiko) {
+
+	if ($stock_value > $stock_in_zaiko) {
 		$_SESSION["error"] = "出荷量は在庫量を超えることはできません";
 		include 'syukka.php';
 		exit();
@@ -128,8 +131,29 @@ foreach ($result_books as $result) {
 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
 }
 
+
+///* 
+// * ㉓POSTでこの画面のボタンの「add」に値が入ってるか確認する。
+// * 値が入っている場合は中身に「ok」が設定されていることを確認する。
+// */
+//if(/* ㉓の処理を書く */){
+//	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。
+//
+//	//㉕POSTの「books」から値を取得し、変数に設定する。
+//	foreach(/* ㉕の処理を書く */){
+//		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
+//		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出して書籍情報の「stock」から値を引いた値を変数に保存する。
+//		//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
+//		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
+//	}
+//
+//	//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
+//	//㉛「header」関数を使用して在庫一覧画面へ遷移する。
+//}
+
+
 if (isset($_POST['add'])) {
-	if ($_POST['add'] == 'ok') {
+	if ($_POST['add'] === 'ok') {
 		$count_update = 0;
 		//㉕POSTの「books」から値を取得し、変数に設定する。
 		foreach ($_POST['books'] as $book_up) {
@@ -138,9 +162,9 @@ if (isset($_POST['add'])) {
 			//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
 			$stock_up = $_POST['books'][$count_update];
 			$stock_zaiko = $result_by_id["stock"];
-			$total_update = $stock_zaiko - $stock_up;
+			$total_update = $stock_zaiko-$_POST['stock'][$count_update];
 			///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
-			updateByid($book_up["stock"]['id'], $pdo, $total_update);
+			updateByid($book_up, $pdo, $total_update);
 			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
 			$count_update++;
 		}
@@ -151,6 +175,7 @@ if (isset($_POST['add'])) {
 		header("Location: zaiko_ichiran.php");
 	}
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
