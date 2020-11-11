@@ -133,7 +133,6 @@ if (isset($_POST['add']) && ($_POST['add'] == 'ok')) {
 		$stock_zaiko = $result_by_id["stock"];
 		$total_update = $_POST['stock'][$count_update] + $result_by_id["stock"];	
 		///㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
-		var_dump($result_by_id['id']);
 		updateByid($result_by_id['id'], $pdo, $total_update);
 		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
 		$count_update++;
